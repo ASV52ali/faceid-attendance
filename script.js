@@ -1,50 +1,55 @@
 const video = document.getElementById("camera");
 const btn = document.getElementById("captureBtn");
-const statusBox = document.getElementById("status");
+const status = document.getElementById("status");
+const nameInput = document.getElementById("nameInput");
 
-// ---------- فعال کردن دوربین ----------
+// --- توکن و Chat ID خودت را جایگزین کن ---
+const BALE_TOKEN = "2086834694:UpTaAb1Y9FCL4GRvWL3S6VJAU0E_xD8JWKA";
+const CHAT_ID = "1180806059";
+
+// فعال کردن وبکم
 navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-        video.srcObject = stream;
-    })
-    .catch(err => {
-        statusBox.innerText = "خطا در دسترسی به دوربین";
-        console.error(err);
-    });
+.then(stream => video.srcObject = stream)
+.catch(err => status.innerText = "دوربین فعال نشد");
 
+// ثبت حضور و ارسال به بله
+btn.onclick = async () => {
+    const name = nameInput.value.trim();
+    if (!name) {
+        status.innerText = "لطفا نام خود را وارد کنید";
+        return;
+    }
 
-// ----------
-btn.onclick = () => {
+    status.innerText = "در حال ثبت حضور...";
+
+    // عکس گرفتن از ویدئو
     const canvas = document.createElement("canvas");
-    canvas.width = 160;
-    canvas.height = 120;
-
+    canvas.width = 320;
+    canvas.height = 240;
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    const imageData = canvas.toDataURL("image/png");
+    // تبدیل به Blob
+    canvas.toBlob(async (blob) => {
+        const formData = new FormData();
+        formData.append("chat_id", CHAT_ID);
+        formData.append("photo", blob, "attendance.png");
+        formData.append("caption", ${name}\nتاریخ: ${new Date().toLocaleDateString('fa-IR')}\nساعت: ${new Date().toLocaleTimeString('fa-IR')});
 
-    sendToGoogleSheet(imageData);
+        try {
+            const res = await fetch(https://tapi.bale.ai/bot${BALE_TOKEN}/sendPhoto, {
+                method: "POST",
+                body: formData
+            });
+
+            if (res.ok) {
+                status.innerText = "✔ حضور ثبت شد و عکس ارسال شد";
+            } else {
+                status.innerText = "❌ خطا در ارسال به بله";
+            }
+        } catch (e) {
+            console.error(e);
+            status.innerText = "❌ خطا در ارسال";
+        }
+    }, "image/png");
 };
-
-
-// ----
-function sendToGoogleSheet(imageBase64) {
-
-    const GOOGLE_WEBHOOK = "https://script.google.com/macros/s/AKfycbwL2tJlMvoFQrwl3v7g5zljCgvo7Fm65ITGdER92wu2GdoIcaHkVeQDWtJuxRNwrCPl/exec";  
-
-    fetch(GOOGLE_WEBHOOK, {
-        method: "POST",
-        body: JSON.stringify({
-            timestamp: new Date().toLocaleString("fa-IR"),
-            image: imageBase64
-        })
-    })
-    .then(res => {
-        statusBox.innerText = "✔ ثبت شد";
-    })
-    .catch(err => {
-        statusBox.innerText = "❌ خطا در ارسال";
-        console.error(err);
-    });
-}
