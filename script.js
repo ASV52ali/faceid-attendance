@@ -16,8 +16,8 @@ navigator.mediaDevices.getUserMedia({ video: true })
 // ----------
 btn.onclick = () => {
     const canvas = document.createElement("canvas");
-    canvas.width = 320;
-    canvas.height = 240;
+    canvas.width = 160;
+    canvas.height = 120;
 
     const ctx = canvas.getContext("2d");
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
