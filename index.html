@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-    <meta charset="UTF-8">
-    <title>FaceID Attendance</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>ثبت حضور با بله</title>
+<style>
+body { font-family: sans-serif; text-align: center; padding: 30px; background: #f4f4f4; }
+video { width: 320px; height: 240px; border-radius: 10px; background: #000; }
+button { margin-top: 20px; padding: 12px 25px; background: #006cff; color: white; border: none; border-radius: 8px; cursor: pointer; }
+#status { margin-top: 20px; font-size: 18px; }
+</style>
 </head>
 <body>
-
-<h2>سیستم حضور و غیاب FaceID</h2>
-
-<div class="container">
-    <video id="camera" autoplay playsinline></video>
-</div>
-
-<button id="captureBtn">ثبت تصویر و ارسال</button>
-
+<h2>ثبت حضور با بله</h2>
+<video id="camera" autoplay playsinline></video>
+<input id="nameInput" placeholder="نام خود را وارد کنید" style="margin-top:15px; padding:8px; font-size:16px;">
+<br>
+<button id="captureBtn">ثبت حضور</button>
 <div id="status"></div>
 
 <script src="script.js"></script>
