@@ -31,7 +31,7 @@ btn.onclick = () => {
 // ----
 function sendToGoogleSheet(imageBase64) {
 
-    const GOOGLE_WEBHOOK = "PASTE_YOUR_WEBHOOK_HERE";  
+    const GOOGLE_WEBHOOK = "https://script.google.com/macros/s/AKfycbzK0JVWGIZIIAndxe2nA7cwyHrnhQ6URsgcbBGMZ92D8FV_peMSV0SZSKw7F5ktSrAr/exec";  
 
     fetch(GOOGLE_WEBHOOK, {
         method: "POST",
